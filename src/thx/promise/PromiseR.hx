@@ -75,11 +75,11 @@ abstract PromiseR<R, A>(R -> Promise<A>) from R -> Promise<A> {
     return this.compose(f);
   }
 
-  public function local<R0>(f: R -> R0, p: PromiseR<R0, A>): PromiseR<R, A> {
-    return function(r: R) return p.run(f(r));
-  }
-
   public function nil(): PromiseR<R, Nil> {
     return flatMap(const(PromiseR.pure(Nil.nil)));
+  }
+
+  public static function locally<R, R0, A>(f: R -> R0, p: PromiseR<R0, A>): PromiseR<R, A> {
+    return function(r: R) return p.run(f(r));
   }
 }

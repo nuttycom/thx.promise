@@ -104,12 +104,15 @@ abstract PromiseRF<R, E, A>(PromiseR<R, Either<E, A>>) from PromiseR<R, Either<E
     return this.run.compose(f);
   }
 
-  public function local<R0>(f: R -> R0, p: PromiseRF<R0, E, A>): PromiseRF<R, E, A> {
-    return function(r: R) return p.run(f(r));
-  }
-
   public function nil(): PromiseRF<R, E, Nil> {
     return map(const(Nil.nil));
+  }
+
+  /**
+   * Run the specified action in a modified environment.
+   */
+  public static function locally<R, R0, E, A>(f: R -> R0, p: PromiseRF<R0, E, A>): PromiseRF<R, E, A> {
+    return function(r: R) return p.run(f(r));
   }
 
   /**
